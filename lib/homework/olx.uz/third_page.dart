@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_day_17/homework/olx.uz/second_page.dart';
 import 'package:flutter_day_17/homework/utils/widgets/extension.dart';
-import 'package:flutter_day_17/homework/widgets/extension.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'first_page.dart';
@@ -33,7 +32,7 @@ class ThirdPage extends StatefulWidget {
 }
 
 class _ThirdPageState extends State<ThirdPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<Item> items = [
     Item(
@@ -143,12 +142,12 @@ class _ThirdPageState extends State<ThirdPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(CupertinoIcons.arrow_up_arrow_down),
-            SizedBox(width: 15),
+            const Icon(CupertinoIcons.arrow_up_arrow_down),
+            const SizedBox(width: 15),
             Expanded(
               child: TextField(
                 controller: _searchController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search...',
                   border: InputBorder.none,
                 ),
@@ -163,29 +162,29 @@ class _ThirdPageState extends State<ThirdPage> {
               itemBuilder: (BuildContext context) {
                 return [
                   PopupMenuItem(
-                    child: Text('First Page'),
+                    child: const Text('First Page'),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => FirstPage()),
+                        MaterialPageRoute(builder: (context) => const FirstPage()),
                       );
                     },
                   ),
                   PopupMenuItem(
-                    child: Text('Second Page'),
+                    child: const Text('Second Page'),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SecondPage()),
+                        MaterialPageRoute(builder: (context) => const SecondPage()),
                       );
                     },
                   ),
                   PopupMenuItem(
-                    child: Text('Third Page'),
+                    child: const Text('Third Page'),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ThirdPage()),
+                        MaterialPageRoute(builder: (context) => const ThirdPage()),
                       );
                     },
                   ),
@@ -211,7 +210,7 @@ class _ThirdPageState extends State<ThirdPage> {
         child: ZoomTapAnimation(
           child: FloatingActionButton(
             backgroundColor: Colors.blue,
-            shape: RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(),
             onPressed: () {},
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -283,7 +282,7 @@ class _ThirdPageState extends State<ThirdPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -342,7 +341,7 @@ class _ThirdPageState extends State<ThirdPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   item.location,
                   style: const TextStyle(

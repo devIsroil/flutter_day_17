@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_day_17/homework/olx.uz/third_page.dart';
 import 'package:flutter_day_17/homework/utils/widgets/extension.dart';
-import 'package:flutter_day_17/homework/widgets/extension.dart';
 import 'package:flutter_day_17/homework/widgets/second_page_controller.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'first_page.dart';
@@ -17,7 +15,7 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Map<String, String>> products = [
     {
       "image": "assets/images/iphone15_img2.jpg",
@@ -119,7 +117,7 @@ class _SecondPageState extends State<SecondPage> {
               Expanded(
                 child: TextField(
                   controller: _searchController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Search...',
                     border: InputBorder.none,
                   ),
@@ -189,17 +187,17 @@ class _SecondPageState extends State<SecondPage> {
         child: ZoomTapAnimation(
           child: FloatingActionButton(
             backgroundColor: Colors.blue,
-            shape: RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(),
             onPressed: () {},
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.favorite_border,
                   color: Colors.white,
                 ),
                 10.width(),
-                Text(
+                const Text(
                   "Save search",
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),

@@ -117,7 +117,7 @@ class _FirstPageState extends State<FirstPage> {
               Expanded(
                 child: TextField(
                   controller: _searchController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Search...',
                     border: InputBorder.none,
                   ),
@@ -176,7 +176,7 @@ class _FirstPageState extends State<FirstPage> {
                   price: product["price"]!,
                   location: product["location"]!,
                 ),
-                SizedBox(height: 110),
+                const SizedBox(height: 110),
               ],
             );
           }).toList(),
@@ -190,9 +190,9 @@ class _FirstPageState extends State<FirstPage> {
             backgroundColor: Colors.blue,
             shape: const RoundedRectangleBorder(),
             onPressed: () {},
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(
                   Icons.favorite_border,
                   color: Colors.white,
