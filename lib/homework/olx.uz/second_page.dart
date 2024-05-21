@@ -1,69 +1,162 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_day_17/homework/olx.uz/third_page.dart';
+import 'package:flutter_day_17/homework/utils/widgets/extension.dart';
 import 'package:flutter_day_17/homework/widgets/extension.dart';
+import 'package:flutter_day_17/homework/widgets/second_page_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'first_page.dart';
 
 class SecondPage extends StatefulWidget {
-  const SecondPage({super.key});
+  const SecondPage({Key? key});
 
   @override
   State<SecondPage> createState() => _SecondPageState();
 }
 
 class _SecondPageState extends State<SecondPage> {
-  bool isFavorite = false;
-  bool isFavorite1 = false;
-  bool isFavorite2 = false;
-  bool isFavorite3 = false;
+  TextEditingController _searchController = TextEditingController();
+  List<Map<String, String>> products = [
+    {
+      "image": "assets/images/iphone15_img2.jpg",
+      "product": "iPhone 15 Pro",
+      "price": "\$1199",
+      "location": "Tashkent, Uchtepa",
+    },
+    {
+      "image": "assets/images/macbook_img.jpg",
+      "product": "MacBook Pro",
+      "price": "\$1499",
+      "location": "Tashkent, Yunusobod",
+    },
+    {
+      "image": "assets/images/bicycle_img1.jpg",
+      "product": "Bicycle",
+      "price": "\$279",
+      "location": "Andijan, Angren",
+    },
+    {
+      "image": "assets/images/malibu_img1.jpg",
+      "product": "Malibu 2022",
+      "price": "\$25 329",
+      "location": "Tashkent, Sergili",
+    },
+    {
+      "image": "assets/images/image_olx7.jpg",
+      "product": "Bengalskiy cat",
+      "price": "\$779",
+      "location": "Tashkent, Chilonzor",
+    },
+    {
+      "image": "assets/images/image_olx1.jpg",
+      "product": "Gentra 2019",
+      "price": "\$13 257",
+      "location": "Tashkent, Chilonzor",
+    },
+    {
+      "image": "assets/images/image_olx2.jpg",
+      "product": "Chemodan",
+      "price": "\$60",
+      "location": "Tashkent, Yashnobod",
+    },
+    {
+      "image": "assets/images/image_olx3.jpg",
+      "product": "Apple MacBook",
+      "price": "\$1399",
+      "location": "Tashkent, Mirzo Ulug'bek",
+    },
+    {
+      "image": "assets/images/image_olx4.jpg",
+      "product": "Kolyaska lux",
+      "price": "\$250",
+      "location": "Samarkand",
+    },
+    {
+      "image": "assets/images/image_olx6.jpg",
+      "product": "Turetskiy sofa",
+      "price": "\$1100",
+      "location": "Tashkent, Mirabad",
+    },
+  ];
+  List<Map<String, String>> filteredProducts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredProducts = products;
+    _searchController.addListener(_filterProducts);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterProducts);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterProducts() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredProducts = products.where((product) {
+        return product['product']!.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70.withOpacity(0.9),
       appBar: AppBar(
         leading: null,
         title: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(CupertinoIcons.arrow_up_arrow_down),
-              SizedBox(width: 15),
+              const Icon(CupertinoIcons.arrow_up_arrow_down),
+              const SizedBox(width: 15),
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
               PopupMenuButton(
-                icon: Icon(
-                  CupertinoIcons.list_dash,
+                icon: const Icon(
+                  Icons.format_list_bulleted,
                   size: 30,
                   color: Colors.black,
                 ),
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: Text('First Page'),
+                      child: const Text('First Page'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FirstPage()),
+                          MaterialPageRoute(builder: (context) => const FirstPage()),
                         );
                       },
                     ),
                     PopupMenuItem(
-                      child: Text('Second Page'),
+                      child: const Text('Second Page'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SecondPage()),
+                          MaterialPageRoute(builder: (context) => const SecondPage()),
                         );
                       },
                     ),
                     PopupMenuItem(
-                      child: Text('Third Page'),
+                      child: const Text('Third Page'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ThirdPage()),
+                          MaterialPageRoute(builder: (context) => const ThirdPage()),
                         );
                       },
                     ),
@@ -78,385 +171,15 @@ class _SecondPageState extends State<SecondPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            children: [
-              30.height(),
-              Container(
-                width: double.infinity,
-                height: 230,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      width: 162,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/iphone15_img2.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        height: 20.h,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Top",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    10.width(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "iPhone 15 Pro...",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                            10.width(),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isFavorite = !isFavorite;
-                                });
-                              },
-                              child: Icon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isFavorite ? Colors.red : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        10.height(),
-                        Container(
-                          width: 60,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Center(
-                            child: Text("New"),
-                          ),
-                        ),
-                        10.height(),
-                        Text(
-                          "\$1199",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        10.height(),
-                        Text(
-                          "Tashkent, Uchtepa",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
-                        ),
-                        Text("Today at 12:27"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              20.height(),
-              Container(
-                width: double.infinity,
-                height: 230,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      width: 162,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/macbook_img.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        height: 20.h,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Top",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    10.width(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "MacBook Pro... ",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                            10.width(),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isFavorite1 = !isFavorite1;
-                                });
-                              },
-                              child: Icon(
-                                isFavorite1
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isFavorite1 ? Colors.red : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        10.height(),
-                        Container(
-                          width: 60,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Center(
-                            child: Text("New"),
-                          ),
-                        ),
-                        10.height(),
-                        Text(
-                          "\$2499",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        10.height(),
-                        Text(
-                          "Tashkent, Yunusobod",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
-                        ),
-                        Text("May 13, 2024"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              20.height(),
-              Container(
-                width: double.infinity,
-                height: 230,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      width: 162,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/bicycle_img1.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        height: 20.h,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Top",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    10.width(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Bicycle               ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            10.width(),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isFavorite2 = !isFavorite2;
-                                });
-                              },
-                              child: Icon(
-                                isFavorite2
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isFavorite2 ? Colors.red : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        10.height(),
-                        Container(
-                          width: 60,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Center(
-                            child: Text("New"),
-                          ),
-                        ),
-                        10.height(),
-                        Text(
-                          "\$279",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        10.height(),
-                        Text(
-                          "Andijan, Angren",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
-                        ),
-                        Text("May 16, 2024"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              20.height(),
-              Container(
-                width: double.infinity,
-                height: 230,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      width: 162,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/malibu_img1.jpg'),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        height: 20.h,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Top",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    10.width(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Malibu 2022      ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            10.width(),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isFavorite3 = !isFavorite3;
-                                });
-                              },
-                              child: Icon(
-                                isFavorite3
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isFavorite3 ? Colors.red : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        10.height(),
-                        Text(
-                          "\$25 329",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        10.height(),
-                        Text(
-                          "Tashkent, Sergili",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
-                        ),
-                        Text("May 9, 2024"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            children: filteredProducts.map((product) {
+              return SecondPageController(
+                image: product["image"]!,
+                product: product["product"]!,
+                price: product["price"]!,
+                location: product["location"]!,
+                time: '', // Add your time property here
+              );
+            }).toList(),
           ),
         ),
       ),
@@ -476,7 +199,10 @@ class _SecondPageState extends State<SecondPage> {
                   color: Colors.white,
                 ),
                 10.width(),
-                Text("Save search",style: TextStyle(color: Colors.white,fontSize: 16),),
+                Text(
+                  "Save search",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
               ],
             ),
           ),
@@ -484,25 +210,30 @@ class _SecondPageState extends State<SecondPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.only(top: 14),
-                child: Icon(Icons.home_filled,color: Colors.black,),
-              ),
-              label: 'Home'),
+            icon: Padding(
+              padding: EdgeInsets.only(top: 14),
+              child: Icon(Icons.home_filled, color: Colors.black),
+            ),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border,color: Colors.black,),
-            label: 'Favorites',),
+            icon: Icon(Icons.favorite_border, color: Colors.black),
+            label: 'Favorites',
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline,color: Colors.black,),
-            label: 'Create',),
+            icon: Icon(Icons.add_circle_outline, color: Colors.black),
+            label: 'Create',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble,color: Colors.black,),
-              label: 'Message'),
+            icon: Icon(CupertinoIcons.chat_bubble, color: Colors.black),
+            label: 'Message',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person,color: Colors.black,),
-              label: 'Profile'),
+            icon: Icon(CupertinoIcons.person, color: Colors.black),
+            label: 'Profile',
+          ),
         ],
       ),
     );

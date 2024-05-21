@@ -1,24 +1,106 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_day_17/homework/olx.uz/second_page.dart';
 import 'package:flutter_day_17/homework/olx.uz/third_page.dart';
-import 'package:flutter_day_17/homework/widgets/extension.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
+import '../widgets/fisrt_page_controller.dart';
+
 class FirstPage extends StatefulWidget {
-  const FirstPage({Key? key}) : super(key: key);
+  const FirstPage({Key? key});
 
   @override
   State<FirstPage> createState() => _FirstPageState();
 }
 
 class _FirstPageState extends State<FirstPage> {
-  bool isFavorite = false;
-  bool isFavorite1 = false;
-  final scrollController = ScrollController();
+  TextEditingController _searchController = TextEditingController();
+  List<Map<String, String>> products = [
+    {
+      "image": "assets/images/iphone15_img2.jpg",
+      "product": "iPhone 15 Pro Max",
+      "price": "\$1199",
+      "location": "Tashkent, Uchtepa"
+    },
+    {
+      "image": "assets/images/macbook_img.jpg",
+      "product": "MacBook Pro",
+      "price": "\$1499",
+      "location": "Tashkent, Yunusobod"
+    },
+    {
+      "image": "assets/images/bicycle_img1.jpg",
+      "product": "Bicycle",
+      "price": "\$279",
+      "location": "Andijan, Angren"
+    },
+    {
+      "image": "assets/images/malibu_img1.jpg",
+      "product": "Malibu 2022",
+      "price": "\$25 329",
+      "location": "Tashkent, Sergili"
+    },
+    {
+      "image": "assets/images/image_olx7.jpg",
+      "product": "Bengalskiy cat",
+      "price": "\$779",
+      "location": "Tashkent, Chilonzor"
+    },
+    {
+      "image": "assets/images/image_olx1.jpg",
+      "product": "Gentra 2019",
+      "price": "\$13 257",
+      "location": "Tashkent, Chilonzor"
+    },
+    {
+      "image": "assets/images/image_olx2.jpg",
+      "product": "Chemodan transformer",
+      "price": "\$60",
+      "location": "Tashkent, Yashnobod"
+    },
+    {
+      "image": "assets/images/image_olx3.jpg",
+      "product": "Apple MacBook Air 15 M2 8/512",
+      "price": "\$1399",
+      "location": "Tashkent, Mirzo Ulug'bek"
+    },
+    {
+      "image": "assets/images/image_olx4.jpg",
+      "product": "Kolyaska luxmom",
+      "price": "\$250",
+      "location": "Samarkand"
+    },
+    {
+      "image": "assets/images/image_olx6.jpg",
+      "product": "Turetskiy sofa",
+      "price": "\$1100",
+      "location": "Tashkent, Mirabad"
+    },
+  ];
+  List<Map<String, String>> filteredProducts = [];
 
+  @override
+  void initState() {
+    super.initState();
+    filteredProducts = products;
+    _searchController.addListener(_filterProducts);
+  }
+
+  void _filterProducts() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredProducts = products.where((product) {
+        return product['product']!.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterProducts);
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +112,19 @@ class _FirstPageState extends State<FirstPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(CupertinoIcons.arrow_up_arrow_down),
-              SizedBox(width: 15),
+              const Icon(CupertinoIcons.arrow_up_arrow_down),
+              const SizedBox(width: 15),
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
               PopupMenuButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.menu,
                   size: 30,
                   color: Colors.black,
@@ -41,29 +132,29 @@ class _FirstPageState extends State<FirstPage> {
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: Text('First Page'),
+                      child: const Text('First Page'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FirstPage()),
+                          MaterialPageRoute(builder: (context) => const FirstPage()),
                         );
                       },
                     ),
                     PopupMenuItem(
-                      child: Text('Second Page'),
+                      child: const Text('Second Page'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SecondPage()),
+                          MaterialPageRoute(builder: (context) => const SecondPage()),
                         );
                       },
                     ),
                     PopupMenuItem(
-                      child: Text('Third Page'),
+                      child: const Text('Third Page'),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ThirdPage()),
+                          MaterialPageRoute(builder: (context) => const ThirdPage()),
                         );
                       },
                     ),
@@ -76,401 +167,19 @@ class _FirstPageState extends State<FirstPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: 350,
-                    height: 280,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/iphone15_img2.jpg'),
-                        fit: BoxFit.contain,
-                      ),
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                  ),
-                  Positioned(
-                    left: 5,
-                    bottom: 30,
-                    child: Container(
-                      width: 30.w,
-                      height: 20.h,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Top",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 255,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "iPhone 15 Pro Max 256GB",
-                                  style: TextStyle(color: Colors.black, fontSize: 18),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isFavorite = !isFavorite;
-                                    });
-                                  },
-                                  child: Icon(
-                                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                                    color: isFavorite ? Colors.red : null,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            10.height(),
-                            Container(
-                              width: 60,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Text("New"),
-                              ),
-                            ),
-                            10.height(),
-                            Text(
-                              "\$1199",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            10.height(),
-                            Text("Tashkent, Uchtepa")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            110.height(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 280,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/macbook_img.jpg'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 5,
-                    bottom: 30,
-                    child: Container(
-                      width: 30.w,
-                      height: 20.h,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Top",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 255,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Macbook Pro M3",
-                                  style: TextStyle(color: Colors.black, fontSize: 18),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isFavorite1 = !isFavorite1;
-                                    });
-                                  },
-                                  child: Icon(
-                                    isFavorite1 ? Icons.favorite : Icons.favorite_border,
-                                    color: isFavorite1 ? Colors.red : null,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            10.height(),
-                            Container(
-                              width: 60,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Text("New"),
-                              ),
-                            ),
-                            10.height(),
-                            Text(
-                              "\$2499",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            10.height(),
-                            Text("Tashkent, Yunusobod")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            110.height(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 280,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/bicycle_img.jpg'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 5,
-                    bottom: 30,
-                    child: Container(
-                      width: 30.w,
-                      height: 20.h,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Top",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 255,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Bicycle",
-                                  style: TextStyle(color: Colors.black, fontSize: 18),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isFavorite1 = !isFavorite1;
-                                    });
-                                  },
-                                  child: Icon(
-                                    isFavorite1 ? Icons.favorite : Icons.favorite_border,
-                                    color: isFavorite1 ? Colors.red : null,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            10.height(),
-                            Container(
-                              width: 60,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Text("New"),
-                              ),
-                            ),
-                            10.height(),
-                            Text(
-                              "\$279",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            10.height(),
-                            Text("Andijan, Angren")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            110.height(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 280,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/malibu_img1.jpg'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 5,
-                    bottom: 30,
-                    child: Container(
-                      width: 30.w,
-                      height: 20.h,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Top",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 255,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Malibu 2022",
-                                  style: TextStyle(color: Colors.black, fontSize: 18),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isFavorite1 = !isFavorite1;
-                                    });
-                                  },
-                                  child: Icon(
-                                    isFavorite1 ? Icons.favorite : Icons.favorite_border,
-                                    color: isFavorite1 ? Colors.red : null,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            10.height(),
-                            Text(
-                              "\$25 329",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            10.height(),
-                            Text("Toshket, Sergeli")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          children: filteredProducts.map((product) {
+            return Column(
+              children: [
+                FirstPageController(
+                  image: product["image"]!,
+                  product: product["product"]!,
+                  price: product["price"]!,
+                  location: product["location"]!,
+                ),
+                SizedBox(height: 110),
+              ],
+            );
+          }).toList(),
         ),
       ),
       floatingActionButton: SizedBox(
@@ -479,17 +188,20 @@ class _FirstPageState extends State<FirstPage> {
         child: ZoomTapAnimation(
           child: FloatingActionButton(
             backgroundColor: Colors.blue,
-            shape: RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(),
             onPressed: () {},
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(
                   Icons.favorite_border,
                   color: Colors.white,
                 ),
-                10.width(),
-                Text("Save search",style: TextStyle(color: Colors.white,fontSize: 16),),
+                SizedBox(width: 10),
+                Text(
+                  "Save search",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
               ],
             ),
           ),
@@ -497,25 +209,30 @@ class _FirstPageState extends State<FirstPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.only(top: 14),
-                child: Icon(Icons.home_filled,color: Colors.black,),
-              ),
-              label: 'Home'),
+            icon: Padding(
+              padding: EdgeInsets.only(top: 14),
+              child: Icon(Icons.home_filled, color: Colors.black),
+            ),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border,color: Colors.black,),
-              label: 'Favorites',),
+            icon: Icon(Icons.favorite_border, color: Colors.black),
+            label: 'Favorites',
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline,color: Colors.black,),
-            label: 'Create',),
+            icon: Icon(Icons.add_circle_outline, color: Colors.black),
+            label: 'Create',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble,color: Colors.black,),
-              label: 'Message'),
+            icon: Icon(CupertinoIcons.chat_bubble, color: Colors.black),
+            label: 'Message',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person,color: Colors.black,),
-              label: 'Profile'),
+            icon: Icon(CupertinoIcons.person, color: Colors.black),
+            label: 'Profile',
+          ),
         ],
       ),
     );

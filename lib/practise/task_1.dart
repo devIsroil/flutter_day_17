@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Task1 extends StatefulWidget {
@@ -15,7 +14,7 @@ class _Task1State extends State<Task1> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero,(){
-      scrollController.animateTo(widget.location, duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+      scrollController.animateTo(widget.location, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
 
     });
   }
@@ -31,25 +30,25 @@ class _Task1State extends State<Task1> {
           backgroundColor: Colors.blue,
           leading: IconButton(onPressed: (){
             Navigator.of(context).pop(scrollController.offset);
-          }, icon: Icon(Icons.keyboard_arrow_down_outlined),),
-          title: Text("Task 1"),
+          }, icon: const Icon(Icons.keyboard_arrow_down_outlined),),
+          title: const Text("Task 1"),
           actions: [IconButton(onPressed: (){
-            scrollController.animateTo(1000, duration: Duration(seconds: 10), curve: Curves.easeInOut);
-          }, icon: Icon(Icons.add))],
+            scrollController.animateTo(1000, duration: const Duration(seconds: 10), curve: Curves.easeInOut);
+          }, icon: const Icon(Icons.add))],
         ),
         body: Transform.rotate(
           angle: 0,
           child: SingleChildScrollView(
             reverse: false,
-            padding: EdgeInsets.all(20),
-            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(20),
+            physics: const BouncingScrollPhysics(),
             controller: scrollController,
             child: Column(children: [...List.generate(100, (index) {
               return Card(
                 color: Colors.blue,
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Row(children: [Text("Salom $index")],),
+                  child: Row(children: [Text("Hello $index")],),
                 ),
               );
             })

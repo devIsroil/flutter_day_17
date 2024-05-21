@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_day_17/homework/olx.uz/second_page.dart';
-import 'package:flutter_day_17/homework/olx.uz/third_page.dart';
+import 'package:flutter_day_17/homework/utils/widgets/extension.dart';
 import 'package:flutter_day_17/homework/widgets/extension.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import 'first_page.dart';
-
 
 class Item {
   final String imagePath;
@@ -27,17 +26,14 @@ class Item {
 }
 
 class ThirdPage extends StatefulWidget {
-  const ThirdPage({super.key});
+  const ThirdPage({Key? key});
 
   @override
   State<ThirdPage> createState() => _ThirdPageState();
 }
 
 class _ThirdPageState extends State<ThirdPage> {
-  bool isFavorite = false;
-  bool isFavorite1 = false;
-  bool isFavorite2 = false;
-  bool isFavorite3 = false;
+  TextEditingController _searchController = TextEditingController();
 
   List<Item> items = [
     Item(
@@ -66,9 +62,77 @@ class _ThirdPageState extends State<ThirdPage> {
       title: 'Malibu 2022',
       price: '\$25 329',
       location: 'Tashkent, Sergili',
-      date: 'May 9, 2024',
+      date: 'May 17, 2024',
+    ),
+    Item(
+      imagePath: 'assets/images/image_olx7.jpg',
+      title: 'Bengalskiy cat',
+      price: '\$779',
+      location: 'Tashkent, Chilonzor',
+      date: 'May 20, 2024',
+    ),
+    Item(
+      imagePath: 'assets/images/image_olx1.jpg',
+      title: 'Gentra 2019',
+      price: '\$13 257',
+      location: 'Tashkent, Chilonzor',
+      date: 'May 19, 2024',
+    ),
+    Item(
+      imagePath: 'assets/images/image_olx2.jpg',
+      title: 'Chemodan',
+      price: '\$60',
+      location: 'Tashkent, Yashnobod',
+      date: 'May 22, 2024',
+    ),
+    Item(
+      imagePath: 'assets/images/image_olx3.jpg',
+      title: 'Apple MacBook',
+      price: '\$1399',
+      location: "Tashkent, Mirzo Ulug'bek",
+      date: 'May 18, 2024',
+    ),
+    Item(
+      imagePath: 'assets/images/image_olx4.jpg',
+      title: 'Kolyaska lux',
+      price: '\$250',
+      location: 'Samarkand',
+      date: 'May 21, 2024',
+    ),
+    Item(
+      imagePath: 'assets/images/image_olx6.jpg',
+      title: 'Turetskiy sofa',
+      price: '\$1100',
+      location: 'Tashkent, Mirabad',
+      date: 'May 17, 2024',
     ),
   ];
+
+  List<Item> filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = items;
+    _searchController.addListener(_filterItems);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterItems);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterItems() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredItems = items.where((item) {
+        return item.title.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,66 +140,69 @@ class _ThirdPageState extends State<ThirdPage> {
       backgroundColor: Colors.white70.withOpacity(0.9),
       appBar: AppBar(
         leading: null,
-        title: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(CupertinoIcons.arrow_up_arrow_down),
-              SizedBox(width: 15),
-              PopupMenuButton(
-                icon: Transform.rotate(
-                  angle: 77,
-                  child: Icon(
-                    CupertinoIcons.list_bullet_below_rectangle,
-                    size: 30,
-                    color: Colors.black,
-                  ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(CupertinoIcons.arrow_up_arrow_down),
+            SizedBox(width: 15),
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  border: InputBorder.none,
                 ),
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem(
-                      child: Text('First Page'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FirstPage()),
-                        );
-                      },
-                    ),
-                    PopupMenuItem(
-                      child: Text('Second Page'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SecondPage()),
-                        );
-                      },
-                    ),
-                    PopupMenuItem(
-                      child: Text('Third Page'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ThirdPage()),
-                        );
-                      },
-                    ),
-                  ];
-                },
               ),
-            ],
-          ),
+            ),
+            PopupMenuButton(
+              icon: const Icon(
+                CupertinoIcons.qrcode,
+                size: 30,
+                color: Colors.black,
+              ),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    child: Text('First Page'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FirstPage()),
+                      );
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Text('Second Page'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SecondPage()),
+                      );
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Text('Third Page'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ThirdPage()),
+                      );
+                    },
+                  ),
+                ];
+              },
+            ),
+          ],
         ),
       ),
       body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 1.0/1.8,
-
+          childAspectRatio: 1.0 / 1.8,
         ),
-        itemCount: items.length,
+        itemCount: filteredItems.length,
         itemBuilder: (BuildContext context, int index) {
-          return buildItem(items[index]);
+          return buildItem(filteredItems[index]);
         },
       ),
       floatingActionButton: SizedBox(
@@ -149,12 +216,12 @@ class _ThirdPageState extends State<ThirdPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.favorite_border,
                   color: Colors.white,
                 ),
                 10.width(),
-                Text("Save search",style: TextStyle(color: Colors.white,fontSize: 16),),
+                const Text("Save search", style: TextStyle(color: Colors.white, fontSize: 16),),
               ],
             ),
           ),
@@ -162,25 +229,30 @@ class _ThirdPageState extends State<ThirdPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.only(top: 14),
-                child: Icon(Icons.home_filled,color: Colors.black,),
+                padding: EdgeInsets.only(top: 14),
+                child: Icon(Icons.home_filled, color: Colors.black,),
               ),
-              label: 'Home'),
+              label: 'Home'
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border,color: Colors.black,),
-            label: 'Favorites',),
+            icon: Icon(Icons.favorite_border, color: Colors.black,),
+            label: 'Favorites',
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline,color: Colors.black,),
-            label: 'Create',),
+            icon: Icon(Icons.add_circle_outline, color: Colors.black,),
+            label: 'Create',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble,color: Colors.black,),
-              label: 'Message'),
+            icon: Icon(CupertinoIcons.chat_bubble, color: Colors.black,),
+            label: 'Message',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person,color: Colors.black,),
-              label: 'Profile'),
+            icon: Icon(CupertinoIcons.person, color: Colors.black,),
+            label: 'Profile',
+          ),
         ],
       ),
     );
@@ -188,7 +260,7 @@ class _ThirdPageState extends State<ThirdPage> {
 
   Widget buildItem(Item item) {
     return Container(
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
@@ -204,7 +276,7 @@ class _ThirdPageState extends State<ThirdPage> {
                 image: AssetImage(item.imagePath),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
@@ -220,7 +292,7 @@ class _ThirdPageState extends State<ThirdPage> {
                   children: [
                     Text(
                       item.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -240,20 +312,23 @@ class _ThirdPageState extends State<ThirdPage> {
                   ],
                 ),
                 8.height(),
-                Container(
-                  width: 60,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "New",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
+                Visibility(
+                  visible: false,
+                  child: Container(
+                    width: 60,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "New",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -261,7 +336,7 @@ class _ThirdPageState extends State<ThirdPage> {
                 10.height(),
                 Text(
                   item.price,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -270,7 +345,7 @@ class _ThirdPageState extends State<ThirdPage> {
                 SizedBox(height: 4),
                 Text(
                   item.location,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -278,7 +353,7 @@ class _ThirdPageState extends State<ThirdPage> {
                 ),
                 Text(
                   item.date,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -292,5 +367,3 @@ class _ThirdPageState extends State<ThirdPage> {
     );
   }
 }
-
-
